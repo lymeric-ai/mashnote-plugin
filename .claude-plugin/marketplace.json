@@ -1,0 +1,12 @@
+{
+  "name": "mashnote",
+  "owner": { "name": "MashNote" },
+  "description": "MashNote 커넥터 플러그인 마켓플레이스",
+  "plugins": [
+    {
+      "name": "mashnote",
+      "source": "./plugins/mashnote",
+      "description": "Claude 대화를 MashNote 활동 피드에 기록하는 MCP 커넥터 + /mashnote:log 슬래시 커맨드"
+    }
+  ]
+}
