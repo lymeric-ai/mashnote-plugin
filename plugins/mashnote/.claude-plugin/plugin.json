@@ -6,7 +6,7 @@
   "mcpServers": {
     "mashnote": {
       "type": "http",
-      "url": "https://mashnote.app/mcp"
+      "url": "https://www.mashnote.app/mcp"
     }
   }
 }
