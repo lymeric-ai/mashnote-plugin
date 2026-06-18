@@ -81,11 +81,6 @@ codex mcp login mashnote   # 브라우저 로그인
 
 전송은 Streamable HTTP + HTTPS이며, `log_activity`(쓰기) 도구를 그대로 쓸 수 있습니다(search/fetch 도구 불필요).
 
-> **자가 호스팅/관리자 주의:** ChatGPT 웹 커넥터는 브라우저 `Origin`(`https://chatgpt.com`)을 보냅니다.
-> 서버의 DNS-rebinding 가드(`MCP_ALLOWED_ORIGINS`)에 `https://chatgpt.com`을 추가하지 않으면
-> 요청이 403으로 거부됩니다. 예:
-> `MCP_ALLOWED_ORIGINS=https://claude.ai,https://claude.com,https://chatgpt.com`
-
 ---
 
 ## 사용
