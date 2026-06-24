@@ -1,0 +1,10 @@
+{
+  "name": "mashnote",
+  "version": "0.1.0",
+  "description": "MashNote 활동 피드에 대화 요약을 기록하는 MCP 커넥터",
+  "mcpServers": {
+    "mashnote": {
+      "httpUrl": "https://www.mashnote.app/mcp"
+    }
+  }
+}
