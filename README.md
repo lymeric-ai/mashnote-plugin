@@ -40,16 +40,19 @@ MCP를 지원하는 클라이언트(Claude · Codex · ChatGPT 등)면 어디서
 
 ## Codex CLI
 
-**플러그인 한 줄 설치 — 권장(OAuth, 토큰 불필요):**
+**플러그인 설치 — 권장(OAuth, 토큰 불필요):** Codex TUI에서 실행하세요.
 
-```bash
-codex plugin marketplace add lymeric-ai/mashnote-plugin
-codex plugin install mashnote
+```text
+/plugin marketplace add lymeric-ai/mashnote-plugin
+/plugin install mashnote@mashnote
+/reload-plugins
 ```
 
-설치할 때 브라우저 OAuth로 인증됩니다(마켓플레이스 정책 `authentication: ON_INSTALL`).
-자동으로 안 뜨면 `codex mcp login mashnote`로 인증하세요. (Codex 버전에 따라 설치가
-`/plugin` 대화형 메뉴일 수 있습니다.)
+`mashnote@mashnote`는 `플러그인이름@마켓플레이스이름`입니다. `/plugins`로 목록을 열어
+설치·활성화(Space로 토글)해도 됩니다. 설치 시 브라우저 OAuth로 인증됩니다(마켓플레이스
+정책 `authentication: ON_INSTALL`); 자동으로 안 뜨면 `codex mcp login mashnote`로
+인증하세요. 셸에서는 `codex plugin marketplace add lymeric-ai/mashnote-plugin`로
+마켓플레이스를 등록할 수 있습니다.
 
 플러그인 경로가 안 되는 버전이면 **수동**으로 추가하세요 — 설정은
 `~/.codex/config.toml`의 `[mcp_servers.<name>]`에 저장됩니다.
