@@ -1,0 +1,22 @@
+{
+  "name": "mashnote",
+  "interface": {
+    "displayName": "MashNote"
+  },
+  "plugins": [
+    {
+      "name": "mashnote",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/lymeric-ai/mashnote-plugin.git",
+        "path": "./plugins/mashnote",
+        "ref": "main"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
