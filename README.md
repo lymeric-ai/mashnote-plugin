@@ -12,7 +12,7 @@ MCP를 지원하는 클라이언트(Claude · Codex · ChatGPT 등)면 어디서
 
 연결 방식은 두 가지입니다. 클라이언트가 지원하는 쪽을 쓰세요.
 
-- **OAuth (브라우저 로그인)** — claude.ai 웹·데스크탑, Claude Code, Codex, ChatGPT가 지원. 브라우저로 한 번 로그인하면 끝.
+- **OAuth (브라우저 로그인)** — claude.ai 웹·데스크탑, Claude Code, Codex, Gemini CLI, ChatGPT가 지원. 브라우저로 한 번 로그인하면 끝.
 - **개인 액세스 토큰(PAT)** — 브라우저 로그인이 어려운 원격/CI나, 토큰 입력을 선호하는 클라이언트용.
   - MashNote 앱 → **설정 → 연동 → MCP 연동 → "토큰 발급"** 에서 발급. 토큰은 **발급 시 한 번만** 표시되니 복사해 두세요.
 
@@ -47,7 +47,7 @@ codex plugin marketplace add lymeric-ai/mashnote-plugin
 codex plugin add mashnote@mashnote
 ```
 
-설치할 때브라우저 OAuth로 인증됩니다. 자동으로 안 뜨면 `codex mcp login mashnote`로 인증하세요.
+설치할 때 브라우저 OAuth로 인증됩니다. 자동으로 안 뜨면 `codex mcp login mashnote`로 인증하세요.
 
 플러그인 경로가 안 되는 버전이면 **수동**으로 추가하세요 — 설정은
 `~/.codex/config.toml`의 `[mcp_servers.<name>]`에 저장됩니다.
@@ -78,6 +78,49 @@ codex mcp login mashnote   # 브라우저 로그인
 > 구버전 Codex나 stdio만 지원하는 클라이언트라면 `npx mcp-remote`로 원격 서버를
 > 로컬 stdio로 브리지할 수 있습니다:
 > `codex mcp add mashnote -- npx -y mcp-remote https://www.mashnote.app/mcp --header "Authorization: Bearer mn_pat_..."`
+
+## Gemini CLI
+
+**Extension 설치 — 권장(OAuth, 토큰 불필요):**
+
+```bash
+gemini extensions install https://github.com/lymeric-ai/mashnote-plugin
+```
+
+설치 후 첫 사용 시 브라우저 OAuth로 인증됩니다. 토큰을 선호하면 `~/.gemini/settings.json`의
+`mcpServers`에 직접 넣어도 됩니다(원격 서버 키는 `httpUrl`):
+
+```json
+{
+  "mcpServers": {
+    "mashnote": {
+      "httpUrl": "https://www.mashnote.app/mcp",
+      "headers": { "Authorization": "Bearer mn_pat_...." }
+    }
+  }
+}
+```
+
+## Antigravity
+
+마켓플레이스/원클릭 발행 경로가 없어 **수동 설정**입니다. Settings → Customizations →
+**Open MCP Config**(`~/.gemini/config/mcp_config.json`)를 열어 추가하세요(원격 서버 키는
+`serverUrl`):
+
+```json
+{
+  "mcpServers": {
+    "mashnote": {
+      "serverUrl": "https://www.mashnote.app/mcp",
+      "headers": { "Authorization": "Bearer mn_pat_...." }
+    }
+  }
+}
+```
+
+원격 MCP의 OAuth에 알려진 런타임 버그가 있어 **PAT(헤더) 방식을 권장**합니다. Antigravity는
+Gemini CLI와 `~/.gemini/config`를 공유하므로, 위 Gemini extension이 설치돼 있으면 그대로
+인식될 수도 있습니다(버전에 따라 다름).
 
 ## ChatGPT (Developer Mode)
 
