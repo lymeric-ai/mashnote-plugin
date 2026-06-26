@@ -29,7 +29,7 @@ MCP를 지원하는 클라이언트(Claude · Codex · ChatGPT 등)면 어디서
 한 줄 설치(플러그인) — 커넥터와 `/mashnote:log` 커맨드가 같이 들어옵니다:
 
 ```text
-/plugin marketplace add lymeric-ai/mashnote-plugin
+/plugin marketplace add https://github.com/lymeric-ai/mashnote-plugin.git
 /plugin install mashnote@mashnote
 ```
 
