@@ -38,7 +38,22 @@ MCP를 지원하는 클라이언트(Claude · Codex · ChatGPT 등)면 어디서
 > 플러그인 자동 연결이 안 되면(클라이언트 버전 차이) 수동으로도 됩니다:
 > `claude mcp add --transport http mashnote https://www.mashnote.app/mcp`
 
-## Codex CLI
+## Codex 앱 · CLI
+
+플러그인 **0.1.1부터** Codex용 MCP 설정 형식을 수정했습니다. 0.1.0은 설치된 것으로
+보여도 MCP 로딩 중 `invalid transport` 오류가 나서 도구와 OAuth 승인 화면이 나타나지
+않을 수 있습니다. 플러그인 버전은 MashNote 서버 버전과 별개입니다.
+
+기존 설치는 마켓플레이스를 새로고침한 뒤 플러그인을 업데이트하거나 다시 설치하고,
+앱을 재시작해 새 대화에서 확인하세요. CLI에서는 다음과 같이 소스를 새로고침합니다:
+
+```bash
+codex plugin marketplace upgrade mashnote
+```
+
+연결 시 노트 읽기를 승인하려면 OAuth 화면에서 `notes:read`와 허용할 워크스페이스를
+선택해야 합니다. 연결 후 `list_workspaces`의 `canReadNotes`를 확인하고 노트 목록·본문을
+읽어 보세요. 개인 액세스 토큰(PAT)은 활동 기록 전용이며 노트 권한을 부여하지 않습니다.
 
 **플러그인 설치 — 권장(OAuth):**
 

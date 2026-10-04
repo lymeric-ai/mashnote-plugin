@@ -1,7 +1,8 @@
 {
-  "mcp_servers": {
+  "mcpServers": {
     "mashnote": {
-      "url": "https://www.mashnote.app/mcp"
+      "url": "https://www.mashnote.app/mcp",
+      "type": "http"
     }
   }
 }
