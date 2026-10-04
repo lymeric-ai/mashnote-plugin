@@ -1,12 +1,15 @@
 {
   "name": "mashnote",
   "description": "Claude 대화 요약을 MashNote 활동 피드에 기록하는 MCP 커넥터",
-  "author": { "name": "MashNote" },
+  "author": {
+    "name": "MashNote"
+  },
   "homepage": "https://mashnote.app",
   "mcpServers": {
     "mashnote": {
       "type": "http",
       "url": "https://www.mashnote.app/mcp"
     }
-  }
+  },
+  "version": "0.1.2"
 }

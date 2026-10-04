@@ -5,8 +5,15 @@ MCP를 지원하는 클라이언트(Claude · Codex · ChatGPT 등)면 어디서
 
 - **커넥터 URL:** `https://www.mashnote.app/mcp`
   (다른 배포를 쓰면 그 앱 도메인의 `/mcp`로 바꾸세요.)
-- **도구:** `list_workspaces`(기록 전 워크스페이스 확인) · `log_activity`(요약 기록)
-- 기록할 워크스페이스는 기록 시점에 클라이언트가 물어봅니다(워크스페이스가 하나면 생략).
+- **활동 도구:** `log_activity`(요약 기록) · `list_recent_activity`(현재 경로의 최근 기록)
+- **노트 도구:** `list_workspaces` · `list_folders` · `list_notes` · `search_notes` · `get_note`
+- **기본 기록은 워크스페이스 선택 없이** `workspaceId`를 생략합니다. MashNote의 내 매시에서
+  저장한 출처별 워크스페이스 연결을 적용하며, 연결이 없으면 개인 활동으로 남습니다.
+  최근 기록 조회도 같은 기본 경로를 따릅니다.
+- 현재 사용자나 프로젝트 지침이 명시한 목적지만 직접 지정합니다. 대화 주제·읽은 노트·
+  노트 권한 또는 워크스페이스 목록으로 목적지를 추측하지 않습니다. 분류는 기록의 필수 조건이 아닙니다.
+- 기록 결과의 실제 목적지와 `visibility`를 확인하세요. 워크스페이스 연결과 팀 공개는 별도입니다.
+  서버 0.2.3부터 실제 목적지·출처·공개 범위 설정을 응답합니다. 기존 기록은 이동하지 않습니다.
 
 ## 인증 — OAuth vs 토큰
 
@@ -55,44 +62,19 @@ codex plugin marketplace upgrade mashnote
 선택해야 합니다. 연결 후 `list_workspaces`의 `canReadNotes`를 확인하고 노트 목록·본문을
 읽어 보세요. 개인 액세스 토큰(PAT)은 활동 기록 전용이며 노트 권한을 부여하지 않습니다.
 
-**플러그인 설치 — 권장(OAuth):**
+**마켓플레이스 추가 후 플러그인 설치(OAuth):**
 
 ```bash
-codex plugin marketplace add lymeric-ai/mashnote-plugin
+codex plugin marketplace add 'https://github.com/lymeric-ai/mashnote-plugin.git'
 codex plugin add mashnote@mashnote
 ```
 
-설치할 때 브라우저 OAuth로 인증됩니다. 자동으로 안 뜨면 `codex mcp login mashnote`로 인증하세요.
+앱에서도 플러그인 마켓플레이스에 위 저장소를 추가한 뒤 MashNote 플러그인을 설치할 수
+있습니다. 로그인(OAuth)하고 노트 읽기를 사용할 워크스페이스를 승인하세요. 설치 후 앱을
+재시작하고 새 대화에서 `@MashNote`를 선택해 도구가 보이는지 확인합니다.
 
-플러그인 경로가 안 되는 버전이면 **수동**으로 추가하세요 — 설정은
-`~/.codex/config.toml`의 `[mcp_servers.<name>]`에 저장됩니다.
-
-**수동, 토큰(PAT)으로:**
-
-```bash
-export MASHNOTE_TOKEN=mn_pat_....   # 앱 설정 → 연동 탭에서 발급
-codex mcp add mashnote --url https://www.mashnote.app/mcp \
-  --bearer-token-env-var MASHNOTE_TOKEN
-```
-
-생성되는 설정:
-
-```toml
-[mcp_servers.mashnote]
-url = "https://www.mashnote.app/mcp"
-bearer_token_env_var = "MASHNOTE_TOKEN"
-```
-
-**OAuth로:**
-
-```bash
-codex mcp add mashnote --url https://www.mashnote.app/mcp
-codex mcp login mashnote   # 브라우저 로그인
-```
-
-> 구버전 Codex나 stdio만 지원하는 클라이언트라면 `npx mcp-remote`로 원격 서버를
-> 로컬 stdio로 브리지할 수 있습니다:
-> `codex mcp add mashnote -- npx -y mcp-remote https://www.mashnote.app/mcp --header "Authorization: Bearer mn_pat_..."`
+이 안내는 마켓플레이스 → 플러그인 설치 경로를 사용합니다. MCP 서버만 직접 등록하는
+명령(`codex mcp add`)은 플러그인 설치나 대화의 `@MashNote` 선택을 대체하지 않습니다.
 
 ## Gemini CLI
 
@@ -166,3 +148,10 @@ LLM의 표준 지침 칸(ChatGPT 맞춤 설정 · Claude 프로필 환경설정 
 - 또는 자연어로 **"이 대화 매시노트에 기록해줘"** — 같은 `log_activity` 도구를 호출합니다.
 
 원문 대화는 서버로 보내지 않고, 요약(`title` · `summary` · `points` · `detail`)만 기록합니다.
+
+### 기존 설치의 지침 갱신
+
+플러그인 0.1.2는 `/mashnote:log`의 필수 워크스페이스 선택과 기존 기록 덮어쓰기 지침을
+제거합니다. 마켓플레이스를 갱신한 뒤 플러그인을 업데이트하거나 재설치하세요. 이미 복사한
+맞춤 지침에 “먼저 list_workspaces로 선택/질문”이 남아 있으면 앱에서 기본 라우팅 지침을
+다시 복사해 교체하세요. 사용자가 의도한 프로젝트별 고정 목적지는 유지할 수 있습니다.
