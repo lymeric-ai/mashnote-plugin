@@ -81,58 +81,59 @@ codex mcp add mashnote-<workspace> --url https://www.mashnote.app/mcp/<workspace
   --bearer-token-env-var MASHNOTE_TOKEN
 ```
 
-`codex mcp list`에서 로그인 상태를 확인하세요. (명령 이름과 옵션은 설치된 Codex 버전의
-`codex mcp --help`를 기준으로 하세요.)
+`codex mcp list`에서 로그인 상태를 확인하세요. 이 설정은 Codex CLI·IDE 확장·ChatGPT 데스크톱 앱의
+Codex가 함께 읽습니다(앱에서는 Settings → MCP servers, 대화창 `/mcp`, Authenticate 버튼). 저장소 하나에
+워크스페이스를 고정하려면 같은 `[mcp_servers.<name>]` 블록을 그 저장소의 `.codex/config.toml`에 넣으세요
+(trusted project에서만 읽힙니다).
 
 > 0.1.2까지 있던 Codex 플러그인 마켓플레이스는 더 이상 제공하지 않습니다. 플러그인에 묶인
 > 서버 주소가 개인 주소였기 때문입니다. 설치돼 있다면 제거하고 위 방법으로 추가하세요.
 
-## ChatGPT (Developer Mode)
+## ChatGPT (사용자 지정 MCP 서버)
 
-> Plus · Pro · Business · Enterprise · Education 플랜. 웹(chatgpt.com)에서 설정하며,
-> 앱은 계정 단위라 데스크톱 앱에서도 같이 보입니다.
+> 웹(chatgpt.com)에서만 만들 수 있고, 만든 뒤에는 같은 계정의 데스크톱 앱에서도 보입니다.
+> 쓰기 도구(`log_activity`)까지 쓰려면 Business · Enterprise · Education(관리자)이 필요하고,
+> Pro는 읽기 도구만 됩니다. 팀원에게 배포하려면 관리자가 워크스페이스에 게시해야 합니다.
 
-1. 설정 → **Apps → Advanced settings → Developer mode** 켜기
-2. **Create app** → 워크스페이스 **주소** 붙여넣기(워크스페이스마다 앱 하나)
+1. **Plugins → + → Add custom MCP server** (예전 이름: Apps → Advanced settings → Developer mode → Create app)
+2. 워크스페이스 **주소** 붙여넣기(워크스페이스마다 하나)
 3. 인증: **OAuth**(브라우저 로그인) 또는 **토큰**(발급한 PAT 붙여넣기)
-4. Scan Tools 뒤 **Create**. 노트 읽기를 쓰려면 승인 화면에서 해당 권한을 승인하세요.
+4. 도구 스캔 뒤 만들기. 노트 읽기를 쓰려면 승인 화면에서 해당 권한을 승인하세요.
 
-전송은 Streamable HTTP + HTTPS이며, `log_activity`(쓰기) 도구를 그대로 쓸 수 있습니다.
+전송은 Streamable HTTP + HTTPS입니다.
 
-## Gemini CLI
+## Antigravity (앱 · IDE · CLI `agy`)
 
-`~/.gemini/settings.json`의 `mcpServers`에 워크스페이스 주소를 넣습니다(원격 서버 키는 `httpUrl`).
-OAuth를 지원하는 버전이면 `headers` 없이 추가하고 첫 사용 시 브라우저로 로그인하세요.
+> 2026-06-18부터 Gemini CLI는 Google AI Pro/Ultra·무료 개인 사용자에게 서비스를 중단하고
+> Antigravity CLI로 대체됐습니다. 개인 사용자는 Antigravity를 쓰세요.
+
+`~/.gemini/config/mcp_config.json`(앱·IDE·CLI 공용, 모든 프로젝트) 또는 저장소의
+`.agents/mcp_config.json`(그 저장소만, 워크스페이스 고정)에 추가합니다. 원격 서버 키는 `serverUrl`.
+앱에서는 Settings → Customizations → **Open MCP Config**로 같은 파일이 열립니다.
 
 ```json
 {
   "mcpServers": {
     "mashnote-<workspace>": {
-      "httpUrl": "https://www.mashnote.app/mcp/<workspaceId>",
-      "headers": { "Authorization": "Bearer mn_pat_...." }
+      "serverUrl": "https://www.mashnote.app/mcp/<workspaceId>"
     }
   }
 }
 ```
+
+저장 뒤 **Authenticate**를 누르면 브라우저 OAuth가 자동으로 진행됩니다(동적 클라이언트 등록 지원).
+OAuth가 막히는 환경이면 `"headers": { "Authorization": "Bearer mn_pat_...." }`를 넣어 토큰으로 쓰세요.
+
+## Gemini CLI (레거시 — Code Assist Standard/Enterprise·유료 API 키 사용자)
+
+```bash
+gemini mcp add --transport http --scope user mashnote-<workspace> https://www.mashnote.app/mcp/<workspaceId>
+```
+
+`--scope project`로 저장소에 고정할 수 있고, 토큰을 쓰려면 `-H "Authorization: Bearer mn_pat_...."`를
+덧붙이세요. 첫 호출에서 401을 받으면 OAuth 로그인이 자동으로 뜹니다.
 
 > 0.1.2까지 있던 Gemini extension(`gemini extensions install …`)은 개인 주소에 묶여 있어 제거했습니다.
-
-## Antigravity
-
-Settings → Customizations → **Open MCP Config**(`~/.gemini/config/mcp_config.json`)를 열어
-추가하세요(원격 서버 키는 `serverUrl`). 원격 MCP의 OAuth에 알려진 런타임 버그가 있어
-**PAT(헤더) 방식을 권장**합니다.
-
-```json
-{
-  "mcpServers": {
-    "mashnote-<workspace>": {
-      "serverUrl": "https://www.mashnote.app/mcp/<workspaceId>",
-      "headers": { "Authorization": "Bearer mn_pat_...." }
-    }
-  }
-}
-```
 
 ---
 
