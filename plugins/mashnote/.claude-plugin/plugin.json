@@ -1,9 +1,0 @@
-{
-  "name": "mashnote",
-  "description": "현재 대화를 MashNote 활동 피드에 기록하는 /mashnote:log 커맨드. MCP 서버는 워크스페이스 주소로 프로젝트에 직접 추가합니다.",
-  "author": {
-    "name": "MashNote"
-  },
-  "homepage": "https://mashnote.app",
-  "version": "0.1.3"
-}

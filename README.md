@@ -46,18 +46,28 @@ https://www.mashnote.app/mcp/<workspaceId>
 
 ## Claude Code
 
-MCP 서버는 **프로젝트 범위**로 추가하는 걸 권장합니다. `.mcp.json`에 저장돼 같은 저장소를
-여는 팀원도 같은 워크스페이스에 기록합니다. 서버 이름은 워크스페이스별로 다르게 붙이세요
-(앱의 설정 카드가 이름과 명령을 만들어 줍니다).
+앱의 설정 카드(설정 → 연동 → MCP 연동 → Claude → Claude Code (CLI))가 워크스페이스별
+**플러그인 설치 명령 두 줄**을 만들어 줍니다. 그대로 실행하면 그 워크스페이스의 MCP 서버와
+`/mashnote:log` 커맨드가 함께 등록됩니다.
+
+```text
+/plugin marketplace add https://www.mashnote.app/plugins/<workspaceId>/marketplace.json?server=mashnote-<workspace>
+/plugin install mashnote@mashnote-<workspace>
+```
+
+새 세션에서 **`/mcp`로 인증**(브라우저 OAuth 1회)하세요. 플러그인은 사용자 범위라 모든
+프로젝트에서 이 워크스페이스에 기록합니다.
+
+저장소마다 다른 워크스페이스에 기록하려면 MCP 서버를 **프로젝트 범위**로 추가하세요.
+`.mcp.json`에 저장돼 같은 저장소를 여는 팀원도 같은 워크스페이스에 기록합니다. 서버 이름은
+워크스페이스별로 다르게 붙이세요(설정 카드의 'CLI로 설정'이 이름과 명령을 만들어 줍니다).
 
 ```bash
 claude mcp add --transport http --scope project mashnote-<workspace> https://www.mashnote.app/mcp/<workspaceId>
 ```
 
-새 세션에서 **`/mcp`로 인증**(브라우저 OAuth 1회)하세요.
-
-`/mashnote:log` 커맨드(현재 대화 요약 기록)는 플러그인으로 설치합니다. 플러그인은 커맨드만
-제공하고 MCP 서버는 포함하지 않으니, 위 서버 추가는 따로 해야 합니다.
+이때 `/mashnote:log` 커맨드만 따로 원하면 이 저장소의 마켓플레이스에서 설치합니다(커맨드만
+제공, MCP 서버 없음). 워크스페이스 플러그인과 같은 커맨드이므로 둘 중 하나만 설치하세요.
 
 ```text
 /plugin marketplace add https://github.com/lymeric-ai/mashnote-plugin.git
@@ -157,8 +167,9 @@ gemini mcp add --transport http --scope user mashnote-<workspace> https://www.ma
 
 ### 기존 설치 갱신 (0.1.3)
 
-- 플러그인에서 **MCP 서버를 뺐습니다.** `/plugin marketplace update mashnote` 뒤 플러그인을
-  업데이트하고, 위 Claude Code 방법으로 워크스페이스 서버를 프로젝트에 추가하세요.
+- 플러그인에서 **개인 주소 MCP 서버를 뺐습니다.** 기존 플러그인을 제거(`/plugin uninstall
+  mashnote@mashnote`)하고, 앱 설정 카드의 워크스페이스별 설치 명령 두 줄로 다시 설치하세요
+  (저장소마다 다른 워크스페이스에 기록하려면 위 프로젝트 범위 방법).
 - 예전 개인 주소로 맺은 연결은 서버에서 해제됐습니다. 각 클라이언트에서 그 커넥터를 지우고
   워크스페이스 주소로 다시 추가하세요.
 - 이미 붙여넣은 표준 지침에 "`workspaceId`를 생략/지정" 같은 문구가 남아 있으면 앱에서
